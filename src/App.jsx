@@ -5,6 +5,7 @@ const FUNNEL = {
   TOFU: {
     label: "TOFU",
     full: "Awareness",
+    position: "Top of Funnel",
     sub: "Attract",
     color: "#FDBD97",
     bg: "rgba(253,189,151,0.22)",
@@ -16,6 +17,7 @@ const FUNNEL = {
   MOFU: {
     label: "MOFU",
     full: "Consideration",
+    position: "Middle of Funnel",
     sub: "Nurture",
     color: "#98B6B1",
     bg: "rgba(152,182,177,0.24)",
@@ -27,6 +29,7 @@ const FUNNEL = {
   BOFU: {
     label: "BOFU",
     full: "Conversion",
+    position: "Bottom of Funnel",
     sub: "Sell",
     color: "#CF8C2E",
     bg: "rgba(207,140,46,0.26)",
@@ -115,6 +118,26 @@ function buildCalendar(days, pillars) {
   const weeks = [];
   for (let w = 0; w < 4; w++) weeks.push(buildWeek(days, pillars, w));
   return weeks; // array of 4 arrays
+}
+
+function ResultsBanner({ title, subtitle }) {
+  return (
+    <div style={{
+      background:"rgba(253,189,151,0.18)", border:"1.5px solid rgba(253,189,151,0.5)",
+      borderRadius:12, padding:"16px 20px", marginBottom:24,
+      display:"flex", alignItems:"center", gap:14,
+    }}>
+      <div style={{
+        width:36, height:36, borderRadius:"50%", flexShrink:0,
+        background:"#FDBD97", display:"flex", alignItems:"center", justifyContent:"center",
+        fontSize:18,
+      }}>✅</div>
+      <div>
+        <div style={{ fontSize:14, color:"#F6F4F1", fontWeight:700, fontFamily:"'Montserrat', sans-serif", marginBottom:2 }}>{title}</div>
+        <div style={{ fontSize:12, color:"#E8E4DC", lineHeight:1.5 }}>{subtitle}</div>
+      </div>
+    </div>
+  );
 }
 
 // ─── SMALL COMPONENTS ────────────────────────────────────────────────────────
@@ -458,17 +481,63 @@ Return ONLY valid JSON:
           <p style={{ fontSize:13, color:"#C2B7AD", margin:0, fontWeight:500 }}>TOFU · MOFU · BOFU — built from your brain, not a template</p>
         </div>
 
-        {/* ── funnel legend ── */}
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10, marginBottom:36 }}>
-          {Object.entries(FUNNEL).map(([k,f])=>(
-            <div key={k} style={{ background:f.bg, border:`1.5px solid ${f.border}`, borderRadius:12, padding:"14px 12px", textAlign:"center" }}>
-              <div style={{ fontSize:10, color:f.color, letterSpacing:2.5, textTransform:"uppercase", fontFamily:"'Montserrat', sans-serif", fontWeight:700, marginBottom:4 }}>{f.label}</div>
-              <div style={{ fontSize:14, color:"#F6F4F1", marginBottom:2, fontWeight:600, fontFamily:"'Montserrat', sans-serif" }}>{f.full}</div>
-              <div style={{ fontSize:11, color:"#E8E4DC", fontFamily:"'Montserrat', sans-serif", fontWeight:500, marginBottom:6 }}>{f.pct}% · {f.sub}</div>
-              <div style={{ fontSize:11, color:"#D6CFC7", lineHeight:1.5, fontWeight:400 }}>{f.desc}</div>
+        {/* ── intro / how it works (only on first step) ── */}
+        {step===0 && (
+          <div style={{
+            background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)",
+            borderRadius:12, padding:"18px 20px", marginBottom:20,
+          }}>
+            <div style={{ fontSize:10, color:"#FDBD97", letterSpacing:2.5, textTransform:"uppercase", fontFamily:"'Montserrat', sans-serif", fontWeight:700, marginBottom:8 }}>
+              How This Works
             </div>
-          ))}
-        </div>
+            <p style={{ fontSize:13, color:"#E8E4DC", lineHeight:1.7, margin:"0 0 10px" }}>
+              This tool turns what's already in your head into a real content strategy. You'll answer a few quick questions, brain dump your expertise and ideas, and tell us your voice. From there, we'll identify your content pillars and build you a full month of content ideas, all mapped to a proven funnel structure.
+            </p>
+            <p style={{ fontSize:13, color:"#C2B7AD", lineHeight:1.7, margin:0 }}>
+              Takes about 5-10 minutes. At the end, you'll get your custom pillars and a 4-week calendar you can use right away.
+            </p>
+          </div>
+        )}
+
+        {/* ── TOFU/MOFU/BOFU explainer (only on first step) ── */}
+        {step===0 && (
+          <div style={{
+            background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)",
+            borderRadius:12, padding:"18px 20px", marginBottom:28,
+          }}>
+            <div style={{ fontSize:10, color:"#FDBD97", letterSpacing:2.5, textTransform:"uppercase", fontFamily:"'Montserrat', sans-serif", fontWeight:700, marginBottom:8 }}>
+              What's TOFU, MOFU, and BOFU?
+            </div>
+            <p style={{ fontSize:13, color:"#E8E4DC", lineHeight:1.7, margin:"0 0 14px" }}>
+              These are the three stages of your content funnel. <b>TOFU</b> stands for <b>Top of Funnel</b>, <b>MOFU</b> for <b>Middle of Funnel</b>, and <b>BOFU</b> for <b>Bottom of Funnel</b>. Every piece of content you post does one of three jobs: it gets you discovered, it builds trust, or it gets you booked. A healthy content mix uses all three, in the right proportions.
+            </p>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10 }}>
+              {Object.entries(FUNNEL).map(([k,f])=>(
+                <div key={k} style={{ background:f.bg, border:`1.5px solid ${f.border}`, borderRadius:12, padding:"14px 12px", textAlign:"center" }}>
+                  <div style={{ fontSize:10, color:f.color, letterSpacing:2.5, textTransform:"uppercase", fontFamily:"'Montserrat', sans-serif", fontWeight:700, marginBottom:4 }}>{f.label}</div>
+                  <div style={{ fontSize:10, color:"#C2B7AD", fontFamily:"'Montserrat', sans-serif", fontWeight:500, marginBottom:4 }}>{f.position}</div>
+                  <div style={{ fontSize:14, color:"#F6F4F1", marginBottom:2, fontWeight:600, fontFamily:"'Montserrat', sans-serif" }}>{f.full}</div>
+                  <div style={{ fontSize:11, color:"#E8E4DC", fontFamily:"'Montserrat', sans-serif", fontWeight:500, marginBottom:6 }}>{f.pct}% · {f.sub}</div>
+                  <div style={{ fontSize:11, color:"#D6CFC7", lineHeight:1.5, fontWeight:400 }}>{f.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ── funnel legend (compact, all other steps) ── */}
+        {step!==0 && (
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:10, marginBottom:36 }}>
+            {Object.entries(FUNNEL).map(([k,f])=>(
+              <div key={k} style={{ background:f.bg, border:`1.5px solid ${f.border}`, borderRadius:12, padding:"14px 12px", textAlign:"center" }}>
+                <div style={{ fontSize:10, color:f.color, letterSpacing:2.5, textTransform:"uppercase", fontFamily:"'Montserrat', sans-serif", fontWeight:700, marginBottom:4 }}>{f.label}</div>
+                <div style={{ fontSize:14, color:"#F6F4F1", marginBottom:2, fontWeight:600, fontFamily:"'Montserrat', sans-serif" }}>{f.full}</div>
+                <div style={{ fontSize:11, color:"#E8E4DC", fontFamily:"'Montserrat', sans-serif", fontWeight:500, marginBottom:6 }}>{f.pct}% · {f.sub}</div>
+                <div style={{ fontSize:11, color:"#D6CFC7", lineHeight:1.5, fontWeight:400 }}>{f.desc}</div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* ── stepper ── */}
         <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:0, marginBottom:32 }}>
@@ -647,6 +716,11 @@ Return ONLY valid JSON:
           {/* STEP 2 ── PILLARS */}
           {step===2 && pillars && (
             <div>
+              <ResultsBanner
+                title="Here are your results!"
+                subtitle="These are your custom content pillars, built from what you shared. Scroll through, then continue to build your full content calendar."
+              />
+
               <div style={{ marginBottom:22 }}>
                 <div style={{ fontSize:9, color:"#FDBD97", letterSpacing:3, textTransform:"uppercase", fontFamily:"'Montserrat', sans-serif", marginBottom:7, fontWeight:700 }}>Your Content Identity</div>
                 <p style={{ fontSize:13.5, color:"#D6CFC7", lineHeight:1.7, margin:0, fontStyle:"italic" }}>{insight}</p>
@@ -692,6 +766,11 @@ function BlueprintView({ calendar, pillars, days, insight, tab, setTab, onBack, 
 
   return (
     <div>
+      <ResultsBanner
+        title="Here's your full blueprint!"
+        subtitle="Your content pillars and 4-week calendar are ready to use. Switch tabs to view your pillars or browse the calendar week by week."
+      />
+
       {/* tabs */}
       <div style={{ display:"flex", gap:3, marginBottom:24, background:"rgba(255,255,255,0.03)", borderRadius:10, padding:4 }}>
         {[{id:"pillars",label:"Pillars"},{id:"blueprint",label:"Calendar"}].map(t=>(
